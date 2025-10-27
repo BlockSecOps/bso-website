@@ -1,0 +1,7 @@
+export { Hero } from './Hero'
+export { Problem } from './Problem'
+export { Solution } from './Solution'
+export { Features } from './Features'
+export { Detectors } from './Detectors'
+export { Stats } from './Stats'
+export { Pricing } from './Pricing'

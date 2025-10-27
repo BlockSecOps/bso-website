@@ -1,0 +1,735 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "BlockSecOps API",
+    "version": "1.0.0",
+    "description": "Unified Web3 security scanning platform API. Integrate 25+ security tools into your development workflow with a single API.",
+    "contact": {
+      "name": "BlockSecOps Support",
+      "email": "support@blocksecops.com",
+      "url": "https://blocksecops.com/support"
+    },
+    "license": {
+      "name": "Proprietary",
+      "url": "https://blocksecops.com/terms"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.blocksecops.com/v1",
+      "description": "Production"
+    },
+    {
+      "url": "https://staging-api.blocksecops.com/v1",
+      "description": "Staging"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Scans",
+      "description": "Smart contract security scanning operations"
+    },
+    {
+      "name": "Projects",
+      "description": "Project and repository management"
+    },
+    {
+      "name": "Tools",
+      "description": "Available security tools and their configurations"
+    },
+    {
+      "name": "Reports",
+      "description": "Security reports and findings"
+    },
+    {
+      "name": "Webhooks",
+      "description": "Webhook management and events"
+    }
+  ],
+  "paths": {
+    "/scan": {
+      "post": {
+        "summary": "Scan a smart contract",
+        "description": "Submit a smart contract for comprehensive security analysis using multiple scanning tools.",
+        "operationId": "createScan",
+        "tags": ["Scans"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScanRequest"
+              },
+              "examples": {
+                "solidity": {
+                  "summary": "Scan a Solidity contract",
+                  "value": {
+                    "contract": "MyToken.sol",
+                    "source": "pragma solidity ^0.8.0;\n\ncontract MyToken {\n    mapping(address => uint256) public balances;\n    \n    function transfer(address to, uint256 amount) public {\n        balances[msg.sender] -= amount;\n        balances[to] += amount;\n    }\n}",
+                    "language": "solidity",
+                    "tools": ["slither", "mythril", "aderyn"]
+                  }
+                },
+                "rust": {
+                  "summary": "Scan a Rust/Solana contract",
+                  "value": {
+                    "contract": "lib.rs",
+                    "source": "use anchor_lang::prelude::*;",
+                    "language": "rust",
+                    "tools": ["sec3-xray", "solazy"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Scan initiated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScanResponse"
+                },
+                "example": {
+                  "scan_id": "scan_9k3j2h1f8g7d6s5a",
+                  "status": "queued",
+                  "estimated_time": 120,
+                  "created_at": "2025-10-21T10:30:00Z",
+                  "project_id": "proj_abc123"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/scan/{scan_id}": {
+      "get": {
+        "summary": "Get scan results",
+        "description": "Retrieve detailed results for a completed or in-progress security scan.",
+        "operationId": "getScan",
+        "tags": ["Scans"],
+        "parameters": [
+          {
+            "name": "scan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^scan_[a-zA-Z0-9]+$"
+            },
+            "description": "Unique scan identifier returned from POST /scan",
+            "example": "scan_9k3j2h1f8g7d6s5a"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Scan details and results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScanDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/projects": {
+      "get": {
+        "summary": "List projects",
+        "description": "Retrieve all projects in your organization",
+        "operationId": "listProjects",
+        "tags": ["Projects"],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 100
+            },
+            "description": "Number of items per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of projects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Project"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create project",
+        "description": "Create a new project for organizing scans",
+        "operationId": "createProject",
+        "tags": ["Projects"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "DeFi Protocol"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Main DeFi protocol smart contracts"
+                  },
+                  "repository_url": {
+                    "type": "string",
+                    "format": "uri",
+                    "example": "https://github.com/org/defi-protocol"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Project created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/tools": {
+      "get": {
+        "summary": "List available tools",
+        "description": "Get all security scanning tools available on the platform",
+        "operationId": "listTools",
+        "tags": ["Tools"],
+        "responses": {
+          "200": {
+            "description": "List of available tools",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Tool"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/webhooks": {
+      "get": {
+        "summary": "List webhooks",
+        "description": "Get all configured webhooks",
+        "operationId": "listWebhooks",
+        "tags": ["Webhooks"],
+        "responses": {
+          "200": {
+            "description": "List of webhooks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Webhook"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create webhook",
+        "description": "Register a new webhook endpoint",
+        "operationId": "createWebhook",
+        "tags": ["Webhooks"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["url", "events"],
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "example": "https://api.example.com/webhooks/blocksecops"
+                  },
+                  "events": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": ["scan.completed", "scan.failed", "project.created"]
+                    },
+                    "example": ["scan.completed", "scan.failed"]
+                  },
+                  "secret": {
+                    "type": "string",
+                    "description": "Optional secret for webhook signature verification"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Webhook created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Webhook"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ScanRequest": {
+        "type": "object",
+        "required": ["contract", "language"],
+        "properties": {
+          "contract": {
+            "type": "string",
+            "description": "Contract filename or identifier"
+          },
+          "source": {
+            "type": "string",
+            "description": "Contract source code (optional if providing repository)"
+          },
+          "language": {
+            "type": "string",
+            "enum": ["solidity", "rust", "move", "cairo"],
+            "description": "Smart contract programming language"
+          },
+          "tools": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Specific security tools to use. If omitted, all applicable tools are used.",
+            "example": ["slither", "mythril", "aderyn"]
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Associate scan with a project"
+          }
+        }
+      },
+      "ScanResponse": {
+        "type": "object",
+        "properties": {
+          "scan_id": {
+            "type": "string",
+            "example": "scan_9k3j2h1f8g7d6s5a"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["queued", "running", "completed", "failed"],
+            "example": "queued"
+          },
+          "estimated_time": {
+            "type": "integer",
+            "description": "Estimated completion time in seconds",
+            "example": 120
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "project_id": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ScanDetails": {
+        "type": "object",
+        "properties": {
+          "scan_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["queued", "running", "completed", "failed"]
+          },
+          "contract": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completed_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "results": {
+            "type": "object",
+            "properties": {
+              "vulnerabilities": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Vulnerability"
+                }
+              },
+              "severity_counts": {
+                "type": "object",
+                "properties": {
+                  "critical": {
+                    "type": "integer"
+                  },
+                  "high": {
+                    "type": "integer"
+                  },
+                  "medium": {
+                    "type": "integer"
+                  },
+                  "low": {
+                    "type": "integer"
+                  },
+                  "informational": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "security_score": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100,
+                "description": "Overall security score"
+              }
+            }
+          }
+        }
+      },
+      "Vulnerability": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "example": "Reentrancy vulnerability"
+          },
+          "description": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["critical", "high", "medium", "low", "informational"]
+          },
+          "tool": {
+            "type": "string",
+            "example": "slither"
+          },
+          "location": {
+            "type": "object",
+            "properties": {
+              "file": {
+                "type": "string"
+              },
+              "line": {
+                "type": "integer"
+              },
+              "column": {
+                "type": "integer"
+              }
+            }
+          },
+          "recommendation": {
+            "type": "string"
+          }
+        }
+      },
+      "Project": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "example": "proj_abc123"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "repository_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "scan_count": {
+            "type": "integer"
+          }
+        }
+      },
+      "Tool": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "slither"
+          },
+          "display_name": {
+            "type": "string",
+            "example": "Slither"
+          },
+          "description": {
+            "type": "string"
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["solidity"]
+          },
+          "version": {
+            "type": "string",
+            "example": "0.10.0"
+          }
+        }
+      },
+      "Webhook": {
+        "type": "object",
+        "properties": {
+          "webhook_id": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          },
+          "pages": {
+            "type": "integer"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Unauthorized - Invalid or missing API key",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "error": {
+                "code": "unauthorized",
+                "message": "Invalid API key. Please check your authentication credentials."
+              }
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Resource not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "error": {
+                "code": "not_found",
+                "message": "The requested resource was not found."
+              }
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "description": "Validation error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "error": {
+                "code": "validation_error",
+                "message": "Request validation failed",
+                "details": {
+                  "language": "Must be one of: solidity, rust, move, cairo"
+                }
+              }
+            }
+          }
+        }
+      },
+      "RateLimited": {
+        "description": "Rate limit exceeded",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "error": {
+                "code": "rate_limited",
+                "message": "Rate limit exceeded. Please try again in 60 seconds."
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Use your API key as a Bearer token. Get your API key from the dashboard at https://app.blocksecops.com/settings/api"
+      }
+    }
+  }
+}

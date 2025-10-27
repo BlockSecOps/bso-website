@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-dark-400 text-white;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Progressive enhancement: ensure content visible if JS fails */
+  html.no-js main *,
+  html:not(.js-loaded) main * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+@layer components {
+  /* Glassmorphism effect */
+  .glass {
+    @apply bg-white/5 backdrop-blur-[10px] border border-white/10;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+
+  /* Neon glow effects */
+  .neon-glow {
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5),
+                0 0 40px rgba(0, 212, 255, 0.3),
+                0 0 60px rgba(0, 212, 255, 0.1);
+  }
+
+  .neon-glow-purple {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.5),
+                0 0 40px rgba(139, 92, 246, 0.3),
+                0 0 60px rgba(139, 92, 246, 0.1);
+  }
+
+  /* Grid background pattern */
+  .grid-pattern {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+}
+
+@layer utilities {
+  /* Custom scrollbar */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    @apply bg-dark-300;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-electric-500/50 rounded-full;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    @apply bg-electric-500;
+  }
+
+  /* Firefox-compatible gradient text */
+  .gradient-text {
+    background: linear-gradient(to right, #00D4FF, #8B5CF6);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* Firefox fallback - if gradient doesn't work, show solid color */
+  @supports not (background-clip: text) or not (-webkit-background-clip: text) {
+    .gradient-text {
+      color: #00D4FF;
+      background: none;
+      -webkit-text-fill-color: unset;
+      -moz-text-fill-color: unset;
+    }
+  }
+
+  /* Hide Next.js dev indicator */
+  #devtools-indicator {
+    display: none !important;
+  }
+}
