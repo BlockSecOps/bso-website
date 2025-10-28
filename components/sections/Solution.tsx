@@ -20,8 +20,8 @@ const solutions = [
   {
     icon: Zap,
     title: 'Multi-Language Support',
-    stat: '6 Languages',
-    description: 'One platform for Solidity, Rust, Vyper, Move, Cairo, and more. No need to juggle different tools for different blockchains.',
+    stat: '4 Languages',
+    description: 'One platform for Solidity, Rust, Vyper, Cairo, and more. No need to juggle different tools for different blockchains.',
   },
 ]
 

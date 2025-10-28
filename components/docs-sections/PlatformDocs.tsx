@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Card } from '@/components/ui'
-import { Code2, Terminal, Blocks, Puzzle } from 'lucide-react'
+import { Code2, Terminal, Puzzle } from 'lucide-react'
 
 const platforms = [
   {
@@ -18,13 +18,6 @@ const platforms = [
     description: 'Solana smart contract security',
     tools: ['Sol-azy', 'Sec3 X-Ray', 'Trident Fuzzer', 'cargo-fuzz'],
     color: 'from-orange-500 to-red-500',
-  },
-  {
-    icon: Blocks,
-    name: 'Move',
-    description: 'Aptos and Sui blockchains',
-    tools: ['Move Prover', 'cargo-fuzz-move', 'Move Analyzer'],
-    color: 'from-purple-500 to-pink-500',
   },
   {
     icon: Puzzle,
@@ -89,7 +82,7 @@ export function PlatformDocs() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {platforms.map((platform, index) => (
               <motion.div
                 key={platform.name}
