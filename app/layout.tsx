@@ -20,8 +20,8 @@ export const metadata: Metadata = {
     default: 'BlockSecOps - Unified Web3 Security Platform',
     template: '%s | BlockSecOps'
   },
-  description: 'The unified security operations platform for Web3. 25+ integrated security tools, <5% false positives, enterprise-grade protection for smart contracts.',
-  keywords: ['Web3 security', 'smart contract security', 'blockchain security', 'DeFi security', 'Solidity security', 'smart contract audit'],
+  description: 'Smart contract vulnerability management that matters. BlockSecOps unifies 25+ scanners into actionable intelligence: deduplication, metrics, risk scoring, and automated reporting.',
+  keywords: ['Web3 security', 'smart contract security', 'blockchain security', 'DeFi security', 'Solidity security', 'smart contract audit', 'vulnerability management'],
   authors: [{ name: 'Advanced Blockchain Security' }],
   icons: {
     icon: '/favicon.svg',
@@ -33,13 +33,13 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://blocksecops.com',
     title: 'BlockSecOps - Unified Web3 Security Platform',
-    description: '25+ security tools in one platform. Enterprise-grade protection for smart contracts.',
+    description: 'Smart contract vulnerability management that matters. Unified scanner intelligence with deduplication, risk scoring, and automated reporting.',
     siteName: 'BlockSecOps',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'BlockSecOps - Unified Web3 Security Platform',
-    description: '25+ security tools in one platform. Enterprise-grade smart contract protection.',
+    description: 'Vulnerability management that matters. Unify 25+ scanners into actionable intelligence with risk scoring and automated reporting.',
   },
 }
 
