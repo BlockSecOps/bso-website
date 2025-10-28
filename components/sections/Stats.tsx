@@ -122,7 +122,7 @@ export function Stats() {
           </div>
           <div className="hidden sm:block w-px bg-white/10" />
           <div>
-            <div className="text-2xl font-bold text-white mb-1">6</div>
+            <div className="text-2xl font-bold text-white mb-1">4</div>
             <p className="text-sm text-white/60">Languages Supported</p>
           </div>
           <div className="hidden sm:block w-px bg-white/10" />
