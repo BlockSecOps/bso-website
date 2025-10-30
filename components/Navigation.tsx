@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 
 const navLinks = [
   { name: 'Features', href: 'https://blocksecops.com/#features' },
-  { name: 'Pricing', href: '/#pricing' },
+  { name: 'Pricing', href: '/pricing' },
   { name: 'Blog', href: '/blog' },
   { name: 'Docs', href: '/docs' },
   { name: 'API', href: '/api/reference' },

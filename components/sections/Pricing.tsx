@@ -3,54 +3,59 @@
 import { motion } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { Button, Badge } from '@/components/ui'
+import Link from 'next/link'
 
 const plans = [
   {
-    name: 'Starter',
-    price: '$10K',
+    name: 'Developer',
+    price: '$3.5K',
     period: '/year',
-    description: 'Perfect for small teams',
+    description: 'Perfect for indie developers',
     features: [
-      'Up to 5 projects',
-      '10 security tools',
-      'Basic support',
-      'Email support',
-      'Community access',
+      '3 mainnet projects',
+      '2 developer seats',
+      'All supported chains',
+      'Unlimited CI/CD scans',
+      'GitHub/GitLab integration',
+      'Email support (48hr)',
     ],
     cta: 'Get Started',
+    ctaLink: '/request-demo',
+    popular: false,
+  },
+  {
+    name: 'Startup',
+    price: '$12K',
+    period: '/year',
+    description: 'For growing teams',
+    features: [
+      '10 mainnet projects',
+      '5 developer seats',
+      'All supported chains',
+      'Unlimited automated scans',
+      'All CI/CD integrations',
+      'Email + Slack support (24hr)',
+    ],
+    cta: 'Get Started',
+    ctaLink: '/request-demo',
     popular: false,
   },
   {
     name: 'Professional',
     price: '$50K',
     period: '/year',
-    description: 'For growing enterprises',
+    description: 'Enterprise-grade security',
     features: [
       'Unlimited projects',
-      '25+ security tools',
-      'Priority support',
-      'CI/CD integration',
+      '20 developer seats',
+      'Automated fix suggestions',
+      'SSO/SAML',
+      'Priority support (4hr SLA)',
       'Advanced analytics',
-      'Dedicated success manager',
     ],
     cta: 'Request Demo',
+    ctaLink: '/request-demo',
     popular: true,
-  },
-  {
-    name: 'Enterprise',
-    price: '$150K',
-    period: '/year',
-    description: 'For large organizations',
-    features: [
-      'Everything in Professional',
-      'Custom integrations',
-      'SLA guarantees',
-      'Advanced compliance',
-      'SAML/SSO',
-      'On-premise deployment',
-    ],
-    cta: 'Contact Sales',
-    popular: false,
   },
 ]
 
@@ -78,7 +83,7 @@ export function Pricing() {
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-display mb-6">
             Plans That Scale
             <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-electric-500 to-purple-500">
+            <span className="gradient-text">
               With Your Needs
             </span>
           </h2>
@@ -96,9 +101,7 @@ export function Pricing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.6 }}
-              className={`relative ${
-                plan.popular ? 'md:-mt-4 md:mb-4' : ''
-              }`}
+              className={`relative ${plan.popular ? 'md:-mt-4 md:mb-4' : ''}`}
             >
               <div
                 className={`glass rounded-2xl p-8 h-full flex flex-col transition-all duration-300 ${
@@ -132,7 +135,7 @@ export function Pricing() {
                 <ul className="space-y-4 mb-8 flex-grow">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-3">
-                      <div className="flex-shrink-0 w-5 h-5 rounded-full bg-electric-500/20 flex items-center justify-center mt-0.5">
+                      <div className="flex-shrink-0 w-5 h-5 rounded-full bg-electric-500/20 flex items-center justify-center">
                         <Check className="w-3 h-3 text-electric-500" />
                       </div>
                       <span className="text-white/80">{feature}</span>
@@ -141,12 +144,14 @@ export function Pricing() {
                 </ul>
 
                 {/* CTA Button */}
-                <Button
-                  variant={plan.popular ? 'primary' : 'secondary'}
-                  className="w-full"
-                >
-                  {plan.cta}
-                </Button>
+                <Link href={plan.ctaLink}>
+                  <Button
+                    variant={plan.popular ? 'primary' : 'secondary'}
+                    className="w-full"
+                  >
+                    {plan.cta}
+                  </Button>
+                </Link>
               </div>
             </motion.div>
           ))}
@@ -160,9 +165,14 @@ export function Pricing() {
           transition={{ delay: 0.4, duration: 0.6 }}
           className="mt-12 text-center"
         >
-          <p className="text-white/50 text-sm">
+          <p className="text-white/50 text-sm mb-6">
             All plans include: SOC2 compliance, 99.9% uptime SLA, data encryption at rest and in transit
           </p>
+          <Link href="/pricing">
+            <Button variant="ghost" className="text-electric-500 hover:text-electric-400">
+              View Complete Pricing Details →
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </section>

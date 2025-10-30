@@ -10,7 +10,7 @@ const detectors = [
     language: 'Solidity',
     count: '371',
     description: 'Most comprehensive Solidity analysis available',
-    tools: ['Slither', 'Aderyn', '4naly3er', 'Semgrep', 'Solhint', 'Certora'],
+    tools: ['Slither', 'Aderyn', 'Semgrep', 'Solhint', 'Certora'],
     color: 'from-blue-500 to-cyan-500',
   },
   {

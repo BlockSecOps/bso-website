@@ -9,6 +9,10 @@ export const metadata: Metadata = {
   description: 'Latest insights on Web3 security, smart contract auditing, and blockchain DevSecOps best practices.',
 }
 
+// Disable static generation - fetch fresh data on every request
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function BlogPage() {
   const payload = await getPayload({ config })
 
@@ -21,6 +25,7 @@ export default async function BlogPage() {
     },
     sort: '-publishedAt',
     limit: 100,
+    depth: 1, // Populate featuredImage relationship
   })
 
   return (

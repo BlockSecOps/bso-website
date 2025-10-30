@@ -66,7 +66,7 @@ export function Hero() {
             variants={item}
             className="text-lg sm:text-xl md:text-2xl text-white/70 max-w-3xl mx-auto"
           >
-            Cut security review time by 70% while catching more vulnerabilities. BlockSecOps unifies 25+ industry-leading scanners with 500+ detectors, delivering actionable insights through real-time security dashboards and native CI/CD integration. Reduce false positives by 95% and monitor your security posture from pre-commit to production.
+            Cut security review time by 70% while catching more vulnerabilities across Solidity, Vyper, Rust, and Cairo. BlockSecOps unifies 25+ industry-leading scanners with 500+ detectors, delivering actionable insights through real-time security dashboards and native CI/CD integration. Reduce false positives by 95% and monitor your security posture from pre-commit to production.
           </motion.p>
 
           {/* CTA Buttons */}

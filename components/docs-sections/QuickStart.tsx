@@ -49,7 +49,7 @@ export function QuickStart() {
           <h2 className="text-4xl sm:text-5xl font-bold font-display mb-6">
             Get Started in
             <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-electric-500 to-purple-500">
+            <span className="gradient-text">
               Under 5 Minutes
             </span>
           </h2>

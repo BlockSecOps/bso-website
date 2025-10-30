@@ -6,6 +6,8 @@ import config from '@/payload.config'
 import { MarkdownRenderer } from '@/components/MarkdownRenderer'
 import { BlogPromoBlurb } from '@/components/BlogPromoBlurb'
 import { Navigation } from '@/components/Navigation'
+import { BlogSidebar } from '@/components/BlogSidebar'
+import { EngagementTracker } from '@/components/EngagementTracker'
 
 type Props = {
   params: Promise<{
@@ -41,23 +43,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export async function generateStaticParams() {
-  const payload = await getPayload({ config })
-
-  const { docs } = await payload.find({
-    collection: 'blog',
-    where: {
-      status: {
-        equals: 'published',
-      },
-    },
-    limit: 1000,
-  })
-
-  return docs.map((post: any) => ({
-    slug: post.slug,
-  }))
-}
+// Disable static generation - fetch fresh data on every request
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params
@@ -74,6 +62,7 @@ export default async function BlogPostPage({ params }: Props) {
       },
     },
     limit: 1,
+    depth: 1, // Populate featuredImage relationship
   })
 
   const post = docs[0]
@@ -81,6 +70,54 @@ export default async function BlogPostPage({ params }: Props) {
   if (!post) {
     notFound()
   }
+
+  // Get recent posts
+  const { docs: recentPosts } = await payload.find({
+    collection: 'blog',
+    where: {
+      status: {
+        equals: 'published',
+      },
+      slug: {
+        not_equals: slug,
+      },
+    },
+    limit: 5,
+    sort: '-publishedAt',
+  })
+
+  // Get popular posts based on engagement score
+  const { docs: popularPosts } = await payload.find({
+    collection: 'blog',
+    where: {
+      status: {
+        equals: 'published',
+      },
+      slug: {
+        not_equals: slug,
+      },
+    },
+    limit: 5,
+    sort: '-engagementScore', // Sort by engagement score (views + time-on-page)
+  })
+
+  // Get related posts from the same category
+  const { docs: relatedPosts } = await payload.find({
+    collection: 'blog',
+    where: {
+      status: {
+        equals: 'published',
+      },
+      category: {
+        equals: post.category,
+      },
+      slug: {
+        not_equals: slug,
+      },
+    },
+    limit: 3,
+    sort: '-publishedAt',
+  })
 
   const formattedDate = post.publishedAt
     ? new Date(post.publishedAt).toLocaleDateString('en-US', {
@@ -92,6 +129,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-dark-400">
+      <EngagementTracker slug={slug} />
       <Navigation />
       {/* Back Button */}
       <div className="border-b border-white/10 mt-20">
@@ -119,8 +157,11 @@ export default async function BlogPostPage({ params }: Props) {
       </div>
 
       {/* Article */}
-      <article className="py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
+      <div className="py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Content */}
+            <article className="lg:col-span-2">
           {/* Header */}
           <header className="mb-12">
             <div className="flex items-center gap-3 mb-4">
@@ -144,7 +185,11 @@ export default async function BlogPostPage({ params }: Props) {
           {post.featuredImage && (
             <div className="mb-12 rounded-lg overflow-hidden">
               <img
-                src={post.featuredImage}
+                src={
+                  typeof post.featuredImage === 'string'
+                    ? post.featuredImage
+                    : post.featuredImage.url || `/uploads/${post.featuredImage.filename}`
+                }
                 alt={post.title}
                 className="w-full h-auto"
               />
@@ -173,8 +218,37 @@ export default async function BlogPostPage({ params }: Props) {
               </div>
             </div>
           )}
+            </article>
+
+            {/* Sidebar */}
+            <BlogSidebar
+              recentPosts={recentPosts.map((p: any) => ({
+                id: p.id,
+                title: p.title,
+                slug: p.slug,
+                category: p.category,
+                readTime: p.readTime,
+                publishedAt: p.publishedAt,
+              }))}
+              popularPosts={popularPosts.map((p: any) => ({
+                id: p.id,
+                title: p.title,
+                slug: p.slug,
+                category: p.category,
+                readTime: p.readTime,
+              }))}
+              relatedPosts={relatedPosts.map((p: any) => ({
+                id: p.id,
+                title: p.title,
+                slug: p.slug,
+                category: p.category,
+                readTime: p.readTime,
+              }))}
+              content={post.content || ''}
+            />
+          </div>
         </div>
-      </article>
+      </div>
     </div>
   )
 }
