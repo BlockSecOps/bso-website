@@ -3,6 +3,7 @@ import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import sharp from 'sharp'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -48,7 +49,53 @@ export default buildConfig({
       description: 'Secure admin panel for BlockSecOps platform',
     },
   },
+  sharp,
   collections: [
+    // Media collection for file uploads
+    {
+      slug: 'media',
+      upload: {
+        staticDir: path.resolve(dirname, 'public/uploads'),
+        imageSizes: [
+          {
+            name: 'thumbnail',
+            width: 400,
+            height: 300,
+            position: 'centre',
+          },
+          {
+            name: 'card',
+            width: 768,
+            height: 1024,
+            position: 'centre',
+          },
+          {
+            name: 'featured',
+            width: 1200,
+            height: 630,
+            position: 'centre',
+          },
+        ],
+        adminThumbnail: 'thumbnail',
+        mimeTypes: ['image/*'],
+        formatOptions: {
+          format: 'webp',
+          options: {
+            quality: 80,
+          },
+        },
+      },
+      access: {
+        read: () => true,
+      },
+      fields: [
+        {
+          name: 'alt',
+          type: 'text',
+          required: false,
+        },
+      ],
+    },
     // Users collection for admin authentication
     {
       slug: 'users',
@@ -111,9 +158,11 @@ export default buildConfig({
         },
         {
           name: 'featuredImage',
-          type: 'text',
+          type: 'upload',
+          relationTo: 'media',
+          required: false,
           admin: {
-            description: 'URL to the featured image',
+            description: 'Upload a featured image for the blog post',
           },
         },
         {
@@ -171,6 +220,24 @@ export default buildConfig({
           type: 'number',
           admin: {
             description: 'Estimated read time in minutes',
+          },
+        },
+        {
+          name: 'views',
+          type: 'number',
+          defaultValue: 0,
+          admin: {
+            description: 'Total number of page views',
+            readOnly: true,
+          },
+        },
+        {
+          name: 'engagementScore',
+          type: 'number',
+          defaultValue: 0,
+          admin: {
+            description: 'Calculated engagement score (views + time-on-page)',
+            readOnly: true,
           },
         },
       ],
@@ -375,6 +442,52 @@ export default buildConfig({
           required: true,
           admin: {
             description: 'When the form was submitted',
+          },
+        },
+      ],
+    },
+    // Newsletter Subscriptions collection
+    {
+      slug: 'newsletter-subscriptions',
+      admin: {
+        useAsTitle: 'email',
+        defaultColumns: ['email', 'source', 'status', 'subscribedAt'],
+        description: 'Newsletter email subscriptions from the website',
+      },
+      fields: [
+        {
+          name: 'email',
+          type: 'email',
+          required: true,
+          unique: true,
+          admin: {
+            description: 'Email address of the subscriber',
+          },
+        },
+        {
+          name: 'source',
+          type: 'text',
+          defaultValue: 'blog-sidebar',
+          admin: {
+            description: 'Where the subscription came from',
+          },
+        },
+        {
+          name: 'status',
+          type: 'select',
+          required: true,
+          defaultValue: 'active',
+          options: [
+            { label: 'Active', value: 'active' },
+            { label: 'Unsubscribed', value: 'unsubscribed' },
+          ],
+        },
+        {
+          name: 'subscribedAt',
+          type: 'date',
+          required: true,
+          admin: {
+            description: 'When the subscription was created',
           },
         },
       ],

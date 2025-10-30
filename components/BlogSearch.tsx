@@ -13,7 +13,7 @@ interface BlogPost {
   author: string
   publishedAt: string
   readTime?: number
-  featuredImage?: string
+  featuredImage?: string | { url?: string; filename?: string; alt?: string }
   featured?: boolean
 }
 
@@ -181,7 +181,11 @@ function BlogCard({ post, featured = false }: { post: BlogPost; featured?: boole
       {post.featuredImage && (
         <div className="aspect-video bg-dark-200 overflow-hidden">
           <img
-            src={post.featuredImage}
+            src={
+              typeof post.featuredImage === 'string'
+                ? post.featuredImage
+                : post.featuredImage.url || `/uploads/${post.featuredImage.filename}`
+            }
             alt={post.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />

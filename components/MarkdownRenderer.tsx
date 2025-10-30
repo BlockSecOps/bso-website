@@ -8,6 +8,7 @@ import javascript from 'highlight.js/lib/languages/javascript'
 import typescript from 'highlight.js/lib/languages/typescript'
 import bash from 'highlight.js/lib/languages/bash'
 import json from 'highlight.js/lib/languages/json'
+import ini from 'highlight.js/lib/languages/ini'
 import 'highlight.js/styles/vs2015.css'
 
 // Register languages
@@ -16,6 +17,8 @@ hljs.registerLanguage('javascript', javascript)
 hljs.registerLanguage('typescript', typescript)
 hljs.registerLanguage('bash', bash)
 hljs.registerLanguage('json', json)
+hljs.registerLanguage('toml', ini) // Use INI highlighting for TOML
+hljs.registerLanguage('ini', ini)
 
 // Configure marked options
 marked.setOptions({
@@ -37,11 +40,22 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   // Parse markdown to HTML
   const htmlContent = marked.parse(normalizedContent) as string
 
-  // Apply syntax highlighting after render
+  // Apply syntax highlighting and add heading IDs after render
   useEffect(() => {
     if (contentRef.current) {
+      // Apply syntax highlighting
       contentRef.current.querySelectorAll('pre code').forEach((block) => {
         hljs.highlightElement(block as HTMLElement)
+      })
+
+      // Add IDs to headings for table of contents linking
+      contentRef.current.querySelectorAll('h2, h3').forEach((heading) => {
+        const text = heading.textContent || ''
+        const id = text
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)/g, '')
+        heading.id = id
       })
     }
   }, [htmlContent])

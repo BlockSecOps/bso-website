@@ -103,7 +103,7 @@ export function KnowledgeBase() {
           <h2 className="text-4xl sm:text-5xl font-bold font-display mb-6">
             Browse by
             <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-electric-500 to-purple-500">
+            <span className="gradient-text">
               Category
             </span>
           </h2>

@@ -20,7 +20,7 @@ export default function RequestDemoPage() {
         <div className="relative z-10 max-w-5xl mx-auto px-4">
           <div className="text-center mb-12">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold font-display mb-6">
-              Request a <span className="text-transparent bg-clip-text bg-gradient-to-r from-electric-500 to-purple-500">Demo</span>
+              Request a <span className="gradient-text">Demo</span>
             </h1>
             <p className="text-xl text-white/70 max-w-3xl mx-auto">
               See how BlockSecOps can help secure your blockchain infrastructure.
