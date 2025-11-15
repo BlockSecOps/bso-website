@@ -10,7 +10,7 @@ const detectors = [
     language: 'Solidity',
     count: '371',
     description: 'Most comprehensive Solidity analysis available',
-    tools: ['Slither', 'Aderyn', 'Semgrep', 'Solhint', 'Certora'],
+    tools: ['SolidityDefend', 'Slither', 'Aderyn', 'Semgrep', 'Solhint', 'Halmos', 'Echidna', 'Wake', 'Medusa'],
     color: 'from-blue-500 to-cyan-500',
   },
   {
@@ -55,7 +55,7 @@ export function Detectors() {
             Detector & Scanner <span className="text-electric-500">Coverage</span>
           </h2>
           <p className="text-lg sm:text-xl text-white/70 max-w-3xl mx-auto">
-            500+ total detectors across 4 blockchain languages with industry-leading security tool integration
+            580+ total detectors across 4 blockchain languages with industry-leading security tool integration
           </p>
         </motion.div>
 
@@ -99,7 +99,7 @@ export function Detectors() {
           <Card variant="glass" className="inline-block px-12 py-8">
             <div className="flex flex-col sm:flex-row items-center gap-8">
               <div>
-                <div className="text-4xl font-bold text-electric-500 mb-2">500+</div>
+                <div className="text-4xl font-bold text-electric-500 mb-2">580+</div>
                 <p className="text-white/60">Total Detectors</p>
               </div>
               <div className="hidden sm:block w-px h-16 bg-white/10" />

@@ -8,13 +8,12 @@ import { Button } from '@/components/ui'
 import { cn } from '@/lib/utils'
 
 const navLinks = [
+  { name: 'Blog', href: '/blog' },
+  { name: 'Consulting', href: 'https://advancedblockchainsecurity.com' },
+  { name: 'Contact', href: '/contact' },
+  { name: 'Docs', href: '/docs' },
   { name: 'Features', href: 'https://blocksecops.com/#features' },
   { name: 'Pricing', href: '/pricing' },
-  { name: 'Blog', href: '/blog' },
-  { name: 'Docs', href: '/docs' },
-  { name: 'API', href: '/api/reference' },
-  { name: 'DevSecOps Consulting', href: 'https://advancedblockchainsecurity.com' },
-  { name: 'Contact', href: '/contact' },
 ]
 
 export function Navigation() {

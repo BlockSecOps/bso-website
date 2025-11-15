@@ -67,7 +67,7 @@
                     "contract": "MyToken.sol",
                     "source": "pragma solidity ^0.8.0;\n\ncontract MyToken {\n    mapping(address => uint256) public balances;\n    \n    function transfer(address to, uint256 amount) public {\n        balances[msg.sender] -= amount;\n        balances[to] += amount;\n    }\n}",
                     "language": "solidity",
-                    "tools": ["slither", "mythril", "aderyn"]
+                    "tools": ["soliditydefend", "slither", "aderyn", "semgrep", "solhint", "halmos", "echidna", "wake", "medusa"]
                   }
                 },
                 "rust": {

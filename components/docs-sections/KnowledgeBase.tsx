@@ -23,8 +23,8 @@ const categories = [
     title: 'Security Tools',
     description: 'Deep dive into integrated security scanners',
     articles: [
+      'SolidityDefend Integration',
       'Slither Integration',
-      'Mythril Configuration',
       'Aderyn Setup',
       'Semgrep Rules',
       'Custom Tool Integration',

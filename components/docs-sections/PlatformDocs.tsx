@@ -9,7 +9,7 @@ const platforms = [
     icon: Code2,
     name: 'Solidity',
     description: 'Ethereum and EVM-compatible chains',
-    tools: ['Slither', 'Mythril', 'Aderyn', 'Semgrep', 'Echidna', 'Certora'],
+    tools: ['SolidityDefend', 'Slither', 'Aderyn', 'Semgrep', 'Solhint', 'Halmos', 'Echidna', 'Wake', 'Medusa'],
     color: 'from-blue-500 to-cyan-500',
   },
   {

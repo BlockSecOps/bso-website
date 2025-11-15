@@ -1,6 +1,6 @@
 import { Navigation } from '@/components/Navigation'
 import { Footer } from '@/components/Footer'
-import { Hero, Problem, Solution, Features, Detectors, Stats, Pricing } from '@/components/sections'
+import { Hero, Problem, Solution, Features, Detectors, Ecosystems, Stats, Pricing } from '@/components/sections'
 
 export default function Home() {
   return (
@@ -12,6 +12,7 @@ export default function Home() {
       <Features />
       <Pricing />
       <Detectors />
+      <Ecosystems />
       <Stats />
       <Problem />
 

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     default: 'BlockSecOps - Unified Web3 Security Platform',
     template: '%s | BlockSecOps'
   },
-  description: 'Smart contract vulnerability management that matters. BlockSecOps unifies 25+ scanners into actionable intelligence: deduplication, metrics, risk scoring, and automated reporting.',
+  description: 'Smart contract vulnerability management that matters. BlockSecOps unifies top industry-leading scanners with 580+ detectors into actionable intelligence through real-time security dashboards, AI powered intelligence and native CI/CD integration.',
   keywords: ['Web3 security', 'smart contract security', 'blockchain security', 'DeFi security', 'Solidity security', 'smart contract audit', 'vulnerability management'],
   authors: [{ name: 'Advanced Blockchain Security' }],
   icons: {
@@ -33,13 +33,13 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://blocksecops.com',
     title: 'BlockSecOps - Unified Web3 Security Platform',
-    description: 'Smart contract vulnerability management that matters. Unified scanner intelligence with deduplication, risk scoring, and automated reporting.',
+    description: 'Smart contract vulnerability management that matters. Unifies top industry-leading scanners with 580+ detectors into actionable intelligence through real-time security dashboards, AI powered intelligence and native CI/CD integration.',
     siteName: 'BlockSecOps',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'BlockSecOps - Unified Web3 Security Platform',
-    description: 'Vulnerability management that matters. Unify 25+ scanners into actionable intelligence with risk scoring and automated reporting.',
+    description: 'Vulnerability management that matters. Unifies top industry-leading scanners with 580+ detectors into actionable intelligence through AI powered intelligence and native CI/CD integration.',
   },
 }
 

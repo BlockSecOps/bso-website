@@ -37,7 +37,7 @@ const features = [
     stat: '25+ Tools',
     benefit: 'Integrated',
     details: [
-      'Slither, Mythril, Aderyn, Semgrep (Solidity)',
+      'SolidityDefend, Slither, Aderyn, Semgrep, Solhint, Halmos, Echidna, Wake, Medusa',
       'Moccasin, Vyper-specific analyzers',
       'Sol-azy, Sec3 X-Ray (Rust/Solana)',
       'Cairo analyzers (Caracal)',
